@@ -1,0 +1,23 @@
+name: 'Local API'
+values:
+  - key: 'baseUrl'
+    value: 'http://127.0.0.1:8000/api'
+    enabled: true
+  - key: 'authToken'
+    value: ''
+    enabled: true
+  - key: 'testEmail'
+    value: 'postman_test_user@example.com'
+    enabled: true
+  - key: 'testPassword'
+    value: 'Password123!'
+    enabled: true
+  - key: 'deviceName'
+    value: 'postman-desktop'
+    enabled: true
+  - key: 'reportLatitude'
+    value: '-6.20000000'
+    enabled: true
+  - key: 'reportLongitude'
+    value: '106.81666600'
+    enabled: true
