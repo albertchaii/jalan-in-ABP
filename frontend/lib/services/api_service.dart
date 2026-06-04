@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class ApiService {
   // Menggunakan IP lokal Mac agar bisa diakses dari HP fisik di jaringan WiFi yang sama
   static String get baseUrl {
-    return 'http://192.168.100.72:8000/api';
+    return 'http://192.168.100.152:8000/api';
   } 
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   

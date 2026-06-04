@@ -50,12 +50,9 @@
             {{-- Photo --}}
             <div class="admin-card" style="padding:0;overflow:hidden;position:relative;">
                 @if($report->ai_photo_path)
-                    <div style="position:absolute;top:16px;left:16px;z-index:2;background:rgba(107,29,42,0.85);color:white;padding:6px 14px;border-radius:8px;font-size:0.7rem;font-weight:700;letter-spacing:0.04em;">
-                        LAPISAN DETEKSI AI
-                    </div>
-                    <img src="{{ asset('storage/' . $report->ai_photo_path) }}" alt="AI Detection" style="width:100%;max-height:360px;object-fit:cover;display:block;">
+                    <img src="{{ asset('storage/' . $report->ai_photo_path) }}" alt="AI Detection" style="width:100%;height:auto;display:block;">
                 @elseif($report->photo_path)
-                    <img src="{{ asset('storage/' . $report->photo_path) }}" alt="Foto Laporan" style="width:100%;max-height:360px;object-fit:cover;display:block;">
+                    <img src="{{ asset('storage/' . $report->photo_path) }}" alt="Foto Laporan" style="width:100%;height:auto;display:block;">
                 @else
                     <div style="height:240px;display:flex;align-items:center;justify-content:center;background:#f5f0f0;color:#b8a0a5;">
                         <p>Tidak ada foto</p>
@@ -76,6 +73,15 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#15803d" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
                             <span style="font-size:0.85rem;font-weight:600;color:#15803d;">Terverifikasi sebagai {{ $report->damage_type }}</span>
                         </div>
+                        @if($report->detection_count > 0)
+                            <p style="font-size:0.8rem;color:#15803d;font-weight:600;margin:0 0 4px 0;">
+                                {{ $report->detection_count }} titik kerusakan terdeteksi oleh AI
+                            </p>
+                        @elseif($report->ai_photo_path)
+                            <p style="font-size:0.8rem;color:#15803d;font-weight:600;margin:0 0 4px 0;">
+                                Kerusakan berhasil terdeteksi oleh AI
+                            </p>
+                        @endif
                         <p style="font-size:0.8rem;color:#6b7280;margin:0;">Telah divalidasi oleh operator melalui bukti visual.</p>
                     </div>
                 @else

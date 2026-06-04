@@ -17,6 +17,7 @@ class Report extends Model
         'latitude',
         'longitude',
         'damage_type',
+        'detection_count',
         'ai_photo_path',
         'status',
         'operator_id',

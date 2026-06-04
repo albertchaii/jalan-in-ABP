@@ -7,6 +7,7 @@ use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Resources\ReportResource;
 
@@ -86,6 +87,41 @@ class ReportController extends Controller
             'photo_path' => $photoPath,
             'status' => 'Dilaporkan',
         ]);
+
+        $storagePath = storage_path('app/public');
+        $outputDir   = $storagePath . '/reports/ai';
+        $weights     = base_path('../pothole_model.pt');
+        $script      = base_path('detect.py');
+        $photoFull   = $storagePath . '/' . $photoPath;
+
+        $pythonBin = 'D:\\laragon\\bin\\python\\python-3.13\\python.exe';
+
+        $process = new \Symfony\Component\Process\Process([
+            $pythonBin, $script,
+            '--weights',    $weights,
+            '--source',     $photoFull,
+            '--output-dir', $outputDir,
+        ]);
+        $process->setTimeout(120);
+        $process->setEnv(array_filter(getenv()));
+        $process->run();
+
+        Log::info('AI Detection stdout: ' . $process->getOutput());
+        Log::info('AI Detection stderr: ' . $process->getErrorOutput());
+
+        if ($process->isSuccessful()) {
+            $ai = json_decode($process->getOutput(), true);
+
+            if (!empty($ai['detected'])) {
+                $report->update([
+                    'damage_type'     => $ai['damage_type'],
+                    'detection_count' => $ai['count'] ?? 0,
+                    'ai_photo_path'   => 'reports/ai/' . $ai['ai_image_name'],
+                ]);
+            }
+        } else {
+            Log::error('AI Detection failed. Exit code: ' . $process->getExitCode());
+        }
 
         return response()->json([
             'success' => true,
