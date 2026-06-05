@@ -49,10 +49,10 @@
         <div style="display:flex;flex-direction:column;gap:24px;">
             {{-- Photo --}}
             <div class="admin-card" style="padding:0;overflow:hidden;position:relative;">
-                @if($report->ai_photo_path)
-                    <img src="{{ asset('storage/' . $report->ai_photo_path) }}" alt="AI Detection" style="width:100%;height:auto;display:block;">
-                @elseif($report->photo_path)
-                    <img src="{{ asset('storage/' . $report->photo_path) }}" alt="Foto Laporan" style="width:100%;height:auto;display:block;">
+                @if($report->ai_photo_data || $report->ai_photo_path)
+                    <img src="{{ $report->ai_photo_data ?: asset('storage/' . $report->ai_photo_path) }}" alt="AI Detection" style="width:100%;height:auto;display:block;">
+                @elseif($report->photo_data || $report->photo_path)
+                    <img src="{{ $report->photo_data ?: asset('storage/' . $report->photo_path) }}" alt="Foto Laporan" style="width:100%;height:auto;display:block;">
                 @else
                     <div style="height:240px;display:flex;align-items:center;justify-content:center;background:#f5f0f0;color:#b8a0a5;">
                         <p>Tidak ada foto</p>

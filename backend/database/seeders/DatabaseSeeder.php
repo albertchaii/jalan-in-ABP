@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder
             $randomDate = \Carbon\Carbon::createFromTimestamp(rand($startDate->timestamp, $endDate->timestamp));
             $status = $statuses[array_rand($statuses)];
             $damageType = $damageTypes[array_rand($damageTypes)];
-            
+
             // Random coordinates around Jakarta
             $lat = -6.2000 + (rand(-100, 100) / 1000);
             $lng = 106.8000 + (rand(-100, 100) / 1000);

@@ -79,12 +79,18 @@ class ReportController extends Controller
 
         $photoPath = $request->file('photo')->store('reports', 'public');
 
+        // Simpan foto asli ke database sebagai data URI Base64
+        $photoFullPath = storage_path('app/public/' . $photoPath);
+        $photoData = 'data:' . mime_content_type($photoFullPath)
+            . ';base64,' . base64_encode(file_get_contents($photoFullPath));
+
         $report = Report::create([
             'user_id' => Auth::id(),
             'description' => $request->description,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'photo_path' => $photoPath,
+            'photo_data' => $photoData,
             'status' => 'Dilaporkan',
         ]);
 
@@ -113,10 +119,19 @@ class ReportController extends Controller
             $ai = json_decode($process->getOutput(), true);
 
             if (!empty($ai['detected'])) {
+                // Simpan foto hasil deteksi AI ke database sebagai data URI Base64
+                $aiFullPath = $outputDir . '/' . $ai['ai_image_name'];
+                $aiData = null;
+                if (file_exists($aiFullPath)) {
+                    $aiData = 'data:' . mime_content_type($aiFullPath)
+                        . ';base64,' . base64_encode(file_get_contents($aiFullPath));
+                }
+
                 $report->update([
                     'damage_type'     => $ai['damage_type'],
                     'detection_count' => $ai['count'] ?? 0,
                     'ai_photo_path'   => 'reports/ai/' . $ai['ai_image_name'],
+                    'ai_photo_data'   => $aiData,
                 ]);
             }
         } else {
